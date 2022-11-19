@@ -1,0 +1,91 @@
+PART ONE - GET THE ROBOT MOVING!
+------------------------------------
+
+    // Drivetrain default command
+    // Use arcade drive. This will run unless another command uses the drivetrain.
+    // Check which JS axis should be used to speed and rotate
+    m_drivetrain.setDefaultCommand(
+      new ArcadeDrive(
+        m_drivetrain,
+        () -> -m_controller.getRawAxis(1), () -> m_controller.getRawAxis(2)
+      )
+    );
+
+----------------------------------------------------
+PART TWO - USE JOYSTICK BUTTONS TO MAKE STUFF HAPPEN
+----------------------------------------------------
+
+    // JS Buttons
+    
+    // JS Button Example 1 - Tying a simple command to a button
+    // What is a command? Let's look at TurnTime.java...
+    m_buttonY.whenPressed(new TurnTime(0.5, 3, m_drivetrain));
+
+
+    // JS Button Example 2 - Using whenPressed and whenReleased to trigger commands
+    m_buttonA
+      .whenPressed(new RunCommand(() -> m_onboardIO.setGreenLed(true), m_onboardIO))
+      .whenReleased(new RunCommand(() -> m_onboardIO.setGreenLed(false), m_onboardIO));
+
+    // JS Button Example 3 - Using toggleWhenPressed with a StartEndCommend instead
+    m_buttonB.toggleWhenPressed(new StartEndCommand(
+                                      () -> m_onboardIO.setRedLed(true),  // Runs when the command starts
+                                      () -> m_onboardIO.setRedLed(false), // Runs when the command ends
+                                      m_onboardIO));
+
+
+------------------------------------------------------
+PART THREE - USE A SENSOR ON THE ROBOT (ROMI BUTTON A)
+------------------------------------------------------
+
+
+    // Trigger Example
+    // A trigger works like a joystick button, but with any boolean.
+    // Here we check the status of the digital IO button A on the Romi
+    Trigger onboardButtonA = new Trigger(() -> m_onboardIO.getButtonAPressed());
+    onboardButtonA
+        .whenActive(new RunCommand(() -> m_onboardIO.setYellowLed(true), m_onboardIO))
+        .whenInactive(new RunCommand(() -> m_onboardIO.setYellowLed(false), m_onboardIO));
+
+------------------------------------------
+PART FOUR - COMBINING COMMANDS INTO GROUPS
+------------------------------------------
+
+    // JS Button Example 4 - Sequential Commands
+    // Command Groups combine multiple commands into one big one
+    // Sequential Command Groups run each command in sequence
+    
+    m_buttonX.whenPressed(
+      new SequentialCommandGroup(
+        new DriveTime(-0.6, 2.0, m_drivetrain),
+        new TurnTime(-0.5, 1.3, m_drivetrain),
+        new DriveTime(-0.6, 2.0, m_drivetrain),
+        new TurnTime(0.5, 1.3, m_drivetrain)
+      )
+    );
+
+---------------------------------------
+PART FIVE - AUTON COMMANDS AND CHOOSERS
+---------------------------------------
+
+    // Setup SmartDashboard options
+
+    m_chooser.addOption("Auto Routine Time", 
+      new SequentialCommandGroup(
+        new DriveTime(-0.6, 2.0, m_drivetrain),
+        new TurnTime(-0.5, 1.3, m_drivetrain),
+        new DriveTime(-0.6, 2.0, m_drivetrain),
+        new TurnTime(0.5, 1.3, m_drivetrain)
+      )
+    );
+
+    m_chooser.setDefaultOption("Auto Routine Distance",
+      new SequentialCommandGroup(
+        new DriveDistance(-0.5, 10, m_drivetrain),
+        new TurnDegrees(-0.5, 90, m_drivetrain),
+        new DriveDistance(-0.5, 10, m_drivetrain),
+        new TurnDegrees(0.5, 90, m_drivetrain)
+      )
+    );
+
+    SmartDashboard.putData(m_chooser);

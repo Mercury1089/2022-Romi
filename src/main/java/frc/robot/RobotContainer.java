@@ -71,10 +71,16 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    // See if you can replace this with the Sequential Command in PART FOUR
+    // The following just prints a message indicating that no auton has been created.
+    // PART FOUR
+    // - See if you can change this to return the the Sequential Command added to buttonX
+    // - Run in Autonomous mode to see if it worked
     return new PrintCommand("NO AUTON?!");
 
-    // Leave this commented until PART FIVE
+    // PART FIVE
+    // - Comment out all code above this line.
+    // - Uncomment the return statement below to get the selected auton from ShuffleBoard
+
     // return m_chooser.getSelected();
   }
 }

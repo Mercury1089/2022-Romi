@@ -64,13 +64,16 @@ PART FOUR - COMBINING COMMANDS INTO GROUPS
       )
     );
 
+    // If this button works, try making this the autonomous command.
+    // See getAutonomousCommand() at the bottom of RobotContainer.java
+
 ---------------------------------------
 PART FIVE - AUTON COMMANDS AND CHOOSERS
 ---------------------------------------
 
     // Setup SmartDashboard options
 
-    m_chooser.addOption("Auto Routine Time", 
+    m_chooser.setDefaultOption("Auto Routine Time", 
       new SequentialCommandGroup(
         new DriveTime(-0.6, 2.0, m_drivetrain),
         new TurnTime(-0.5, 1.3, m_drivetrain),
@@ -79,7 +82,7 @@ PART FIVE - AUTON COMMANDS AND CHOOSERS
       )
     );
 
-    m_chooser.setDefaultOption("Auto Routine Distance",
+    m_chooser.addOption("Auto Routine Distance",
       new SequentialCommandGroup(
         new DriveDistance(-0.5, 10, m_drivetrain),
         new TurnDegrees(-0.5, 90, m_drivetrain),
